@@ -85,7 +85,7 @@ class GameBoard
     
     def initialize(size, initial_life=nil)
         @size = size
-        @board = Array.new(size) {Array.new(size) {Cell.new false}}
+        @board = Array.new(size) {Array.new(size) {Cell.new :dead}}
         self.seed_board initial_life
     end
     
@@ -152,7 +152,13 @@ end
 
 class Cell
     def initialize is_alive
-        @is_alive = is_alive
+        if is_alive.to_s = "dead"
+            @is_alive = false
+        elsif is_alive.to_s = "alive"
+            @is_alive - false
+        else
+            @is_alive = is_alive
+        end
     end
     
     def alive?
