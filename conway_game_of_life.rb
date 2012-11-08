@@ -152,9 +152,9 @@ end
 
 class Cell
     def initialize is_alive
-        if is_alive.to_s = "dead"
+        if is_alive.to_s == "dead"
             @is_alive = false
-        elsif is_alive.to_s = "alive"
+        elsif is_alive.to_s == "alive"
             @is_alive - false
         else
             @is_alive = is_alive
