@@ -1,6 +1,6 @@
 class Game
     # Main game constructor
-    def initialize(name, size, generations, initial_life=nil)
+    def initialize(name, size, generations, initial_life=nil, display_type=:console)
         @name = name
         @generations = generations
         @board = GameBoard.new size, initial_life
@@ -8,6 +8,10 @@ class Game
         self.display
         @status = :never_run
         @terminal_states = [:all_dead, :static, :generations_complete]
+        @display_type = display_type
+        if @display_type == :rubyvis
+          require 'rubyvis'
+        end
     end
     
     # Run loop
@@ -71,7 +75,12 @@ class Game
     
     # Display board on turn completion
     def display
-      @board.display @current_generation, @name
+      if @display_type == :console
+        @board.display @current_generation, @name
+      elsif @display_type == :rubyvis
+        board_data = @board.display @current_generation, @name
+        # do something with board_data here
+      end
     end
     
     # Display status on turn completion
@@ -141,13 +150,24 @@ class GameBoard
     
     # Display board
     def display(generation, name)
-        puts "#{name} (#{size}x#{size}): generation #{generation}"
-        @board.each do |row| 
-            print '| '
-            row.each do |cell| 
-                print "#{cell.alive? ? '@' : '.'} "
+        if @display_type = :console
+            puts "#{name} (#{size}x#{size}): generation #{generation}"
+            @board.each do |row| 
+                print '| '
+                row.each do |cell| 
+                    print "#{cell.alive? ? '@' : '.'} "
+                end
+                puts '|'
             end
-            puts '|'
+            "output to console"
+        elsif @display_type = :rubyvis
+            board_data = [[]]
+            @board.each do |row|
+                row.each do |cell|
+                    board_data[row] << cell.value
+                end
+            end
+            board_data
         end
     end
     
